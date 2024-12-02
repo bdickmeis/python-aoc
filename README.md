@@ -27,7 +27,7 @@ The puzzle solutions only use Python's standard library. Note that the solution 
 
 ## Author
 
-- **Geir Arne Hjelle**, E-mail: [geirarne@realpython.com](geirarne@realpython.com)
+- **Bart Dickmeis**, E-mail: [bart.dickmeis@gmail.com])
 
 ## License
 

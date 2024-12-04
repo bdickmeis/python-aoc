@@ -2,15 +2,16 @@ import pathlib
 import sys
 import re
 
-def parse(puzzle_input):
+def parse(puzzle_input : str):
     """Parse input"""
-    return [line for line in puzzle_input.split('\n')]
+    return [line for line in puzzle_input.splitlines(True)]
 
-def find_instructions(data) -> list:
+def find_instructions(data : list) -> list:
     instructions = []
     instruction_pattern = r"mul\([0-9]+,[0-9]+\)"
     for line in data:
         matches = re.findall(instruction_pattern,line)
+        #print(f'{matches=}')
         instructions.extend(matches)
     return instructions
 
@@ -31,11 +32,16 @@ def part1(data):
 def part2(data):
     """Solve part 2"""
     enabled_instructions = []
-    enabled = r"(.*)don't\(\).*do\(\)(.*)"
-    for line in data:
-        matches = ["".join(x) for x in re.findall(enabled, line)]
-        enabled_instructions.extend(matches)
-   
+    memory = "".join(data)
+    memory = "".join(memory.split())
+    # adding do() as start - as instructions are enabled from start
+    # adding don't() at the end to make sure last do() captures till end
+    memory = "do()" + memory + "don't()"
+
+    enabled = r"do\(\)(.+?)don't\(\)"
+    
+    enabled_instructions = re.findall(enabled,memory)
+    
     return part1(enabled_instructions)
 
     

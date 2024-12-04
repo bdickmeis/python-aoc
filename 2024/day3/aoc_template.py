@@ -6,27 +6,39 @@ def parse(puzzle_input):
     """Parse input"""
     return [line for line in puzzle_input.split('\n')]
 
-
-def part1(data):
-    """Solve part 1"""
+def find_instructions(data) -> list:
     instructions = []
     instruction_pattern = r"mul\([0-9]+,[0-9]+\)"
     for line in data:
         matches = re.findall(instruction_pattern,line)
         instructions.extend(matches)
-    
+    return instructions
+
+def part1(data):
+    """Solve part 1"""
+    instructions = find_instructions(data)
     sum = 0
     for instruction in instructions:
-        first,second = instruction.split(',')
-        a = first.split('(')[1]
-        b = second.split(')')[0]
-        sum += int(a) * int(b)
-    return sum
-        
+        numbers = instruction.split('mul')[1].replace('(','').replace(')','')
+        first,second = tuple(map(int,numbers.split(',')))
+        #a = first.split('(')[1]
+        #b = second.split(')')[0]
+        #sum += int(a) * int(b)
+        sum += int(first) * int(second)
+    return sum        
 
 
 def part2(data):
     """Solve part 2"""
+    enabled_instructions = []
+    enabled = r"(.*)don't\(\).*do\(\)(.*)"
+    for line in data:
+        matches = ["".join(x) for x in re.findall(enabled, line)]
+        enabled_instructions.extend(matches)
+   
+    return part1(enabled_instructions)
+
+    
 
 
 def solve(puzzle_input):
@@ -40,7 +52,7 @@ def solve(puzzle_input):
 
 if __name__ == "__main__":
     for path in sys.argv[1:]:
-        print(f"{path}:")
+        print(f"Input : {path}")
         puzzle_input = pathlib.Path(path).read_text().strip()
         solutions = solve(puzzle_input)
         print("\n".join(str(solution) for solution in solutions))
